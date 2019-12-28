@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>server-sent events</title>
+    <script>
+        var eventSource
+
+        function init() {
+            eventSource = new EventSource("/message/1");
+            eventSource.onmessage = function(event) {
+                document.getElementById("messages").innerHTML = event.data;
+            };
+        }
+
+        init()
+
+        getReadyState = function( src ) {
+            if ( src.readyState ) {
+                // readyState is almost always 0, we're only interested in
+                // seeing readyState OPEN (1) ( or CLOSED (2) )
+                console.log( [ src.readyState, new Date() ] );
+                init()
+            }
+        };
+
+        setTimeout(function() {
+            getReadyState( eventSource );
+        }, 1000);
+
+    </script>
+</head>
+<body>
+    Listen:
+    <span id="messages"></span>
+</body>
+</html>
